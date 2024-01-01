@@ -36,3 +36,10 @@ db:
       driver: com.mysql.cj.jdbc.Driver
       username: root
       password: root
+
+springdoc:
+  packagesToScan: com.hendisantika.multitenancy
+  swagger-ui:
+    path: /swagger-ui
+  api-docs:
+    path: /v3/api-docs
