@@ -1,9 +1,11 @@
 package com.hendisantika.multitenancy.exception.base;
 
+import com.hendisantika.multitenancy.exception.DataNotFoundException;
+import com.hendisantika.multitenancy.exception.DuplicateException;
+import com.hendisantika.multitenancy.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.ErrorResponse;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
