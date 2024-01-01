@@ -2,6 +2,7 @@ package com.hendisantika.multitenancy.service;
 
 import com.hendisantika.multitenancy.entity.Author;
 import com.hendisantika.multitenancy.entity.Post;
+import com.hendisantika.multitenancy.entity.Tag;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.model.PostDTO;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -78,5 +80,14 @@ public class PostService {
         } else {
             return postRepository.save(modelMapper.map(postRequest, Post.class));
         }
+    }
+
+    public List<Tag> getAllTagsByPostId(Long id) {
+        if (!postRepository.existsById(id)) {
+            throw new DataNotFoundException(
+                    MessageFormat.format("Post id {0} not found", String.valueOf(id)));
+        }
+
+        return postRepository.findById(id).get().getTagList();
     }
 }
