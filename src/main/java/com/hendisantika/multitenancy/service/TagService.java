@@ -2,8 +2,10 @@ package com.hendisantika.multitenancy.service;
 
 import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
 import com.hendisantika.multitenancy.entity.Tag;
+import com.hendisantika.multitenancy.exception.BadRequestException;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.repository.TagRepository;
+import com.hendisantika.multitenancy.util.Translator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +56,15 @@ public class TagService {
             return tagRepository.save(tagUpdate);
         } else {
             return tagRepository.save(tagRequest);
+        }
+    }
+
+    public void deleteById(Long id) {
+        Optional<Tag> tag = tagRepository.findById(id);
+        if (tag.isPresent()) {
+            tagRepository.deleteById(id);
+        } else {
+            throw new BadRequestException(Translator.toLocale("DELETE_ERROR_PLEASE_CHECK_ID"));
         }
     }
 }
