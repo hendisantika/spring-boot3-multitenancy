@@ -1,6 +1,8 @@
 package com.hendisantika.multitenancy.config;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
@@ -16,8 +18,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    private static final String REDIRECT_URL = "/swagger-ui";
+    private static final String REDIRECT_URL = "/swagger-ui.html";
 
     @Value("${spring.mvc.servlet.path}")
     private String baseUrl;
+
+    @Override
+    public void addViewControllers(final ViewControllerRegistry registry) {
+        registry.addRedirectViewController("/", baseUrl.concat(REDIRECT_URL));
+        registry.addRedirectViewController("/swagger-ui", baseUrl.concat(REDIRECT_URL));
+        registry.addRedirectViewController("/api", baseUrl.concat(REDIRECT_URL));
+    }
 }
