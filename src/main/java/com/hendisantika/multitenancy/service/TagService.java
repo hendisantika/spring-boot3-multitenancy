@@ -1,8 +1,12 @@
 package com.hendisantika.multitenancy.service;
 
+import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
+import com.hendisantika.multitenancy.entity.Tag;
 import com.hendisantika.multitenancy.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -20,4 +24,10 @@ public class TagService {
 
     private final TagRepository tagRepository;
 
+    public List<Tag> getAllTags() {
+        SpringBoot3MultitenancyApplication.defaultProperties.setProperty("lang", "fr");
+
+        List<Tag> tagList = tagRepository.findAll();
+        return tagList;
+    }
 }
