@@ -1,0 +1,37 @@
+server:
+  port: 8081
+
+spring:
+  mvc:
+    servlet:
+      path: /api
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:13306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: p@123456
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  jpa:
+    defer-datasource-initialization: false
+    show-sql: true
+  h2:
+    console:
+      enabled: true
+  sql:
+    init:
+      mode: never
+
+db:
+  configurations:
+    en:
+      url: jdbc:mysql://mysql:13306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      driver: com.mysql.cj.jdbc.Driver
+      username: root
+      password: p@123456
+    fr:
+      url: jdbc:mysql://mysql:13306/blog_fr?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      driver: com.mysql.cj.jdbc.Driver
+      username: root
+      password: p@123456
