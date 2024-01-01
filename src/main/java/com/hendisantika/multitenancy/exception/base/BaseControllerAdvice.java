@@ -59,4 +59,10 @@ public class BaseControllerAdvice {
                 String.valueOf(HttpStatus.UNAUTHORIZED.value()), ex.getMessage(), TIMESTAMP);
     }
 
+    @ExceptionHandler({ForbiddenException.class})
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public ErrorResponse handleForbiddenException(Exception ex) {
+        return new ErrorResponse(
+                String.valueOf(HttpStatus.FORBIDDEN.value()), ex.getMessage(), TIMESTAMP);
+    }
 }
