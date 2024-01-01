@@ -90,4 +90,32 @@ public class PostService {
 
         return postRepository.findById(id).get().getTagList();
     }
+
+    public Tag addTag(Long postId, Tag tagRequest) {
+        return postRepository
+                .findById(postId)
+                .map(
+                        post -> {
+                            Optional<Tag> existingTag = tagRepository.findById(tagRequest.getId());
+                            if (tagRequest.getId() != 0) {
+                                if (existingTag.isPresent()) {
+                                    post.addTag(existingTag.get());
+                                    postRepository.save(post);
+                                    return existingTag.get();
+                                } else {
+                                    throw new DataNotFoundException(
+                                            MessageFormat.format(
+                                                    "Tag id {0} not found", String.valueOf(tagRequest.getId())));
+                                }
+                            } else {
+                                // create new tag
+                                post.addTag(tagRequest);
+                                return tagRepository.save(tagRequest);
+                            }
+                        })
+                .orElseThrow(
+                        () ->
+                                new DataNotFoundException(
+                                        MessageFormat.format("Post id {0} not found", String.valueOf(postId))));
+    }
 }
