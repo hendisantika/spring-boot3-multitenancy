@@ -65,4 +65,11 @@ public class BaseControllerAdvice {
         return new ErrorResponse(
                 String.valueOf(HttpStatus.FORBIDDEN.value()), ex.getMessage(), TIMESTAMP);
     }
+
+    @ExceptionHandler({TooManyRequestsException.class})
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    public ErrorResponse handleTooManyRequestsException(Exception ex) {
+        return new ErrorResponse(
+                String.valueOf(HttpStatus.TOO_MANY_REQUESTS.value()), ex.getMessage(), TIMESTAMP);
+    }
 }
