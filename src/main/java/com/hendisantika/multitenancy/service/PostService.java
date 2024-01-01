@@ -1,6 +1,7 @@
 package com.hendisantika.multitenancy.service;
 
 import com.hendisantika.multitenancy.entity.Post;
+import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import com.hendisantika.multitenancy.repository.PostRepository;
 import com.hendisantika.multitenancy.repository.TagRepository;
@@ -11,6 +12,8 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.text.MessageFormat;
 
 /**
  * Created by IntelliJ IDEA.
@@ -44,5 +47,14 @@ public class PostService {
             postList = postRepository.findByTitleContainingIgnoreCase(title, pageable);
         }
         return postList;
+    }
+
+    public Post getById(Long id) {
+        return postRepository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new DataNotFoundException(
+                                        MessageFormat.format("Post id {0} not found", String.valueOf(id))));
     }
 }
