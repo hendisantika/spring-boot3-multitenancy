@@ -1,9 +1,6 @@
 package com.hendisantika.multitenancy.exception.base;
 
-import com.hendisantika.multitenancy.exception.DataNotFoundException;
-import com.hendisantika.multitenancy.exception.DuplicateException;
-import com.hendisantika.multitenancy.exception.ForbiddenException;
-import com.hendisantika.multitenancy.exception.TooManyRequestsException;
+import com.hendisantika.multitenancy.exception.*;
 import com.hendisantika.multitenancy.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.coyote.BadRequestException;
