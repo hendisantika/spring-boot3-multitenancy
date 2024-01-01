@@ -3,11 +3,13 @@ package com.hendisantika.multitenancy.service;
 import com.hendisantika.multitenancy.entity.Author;
 import com.hendisantika.multitenancy.entity.Post;
 import com.hendisantika.multitenancy.entity.Tag;
+import com.hendisantika.multitenancy.exception.BadRequestException;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.model.PostDTO;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import com.hendisantika.multitenancy.repository.PostRepository;
 import com.hendisantika.multitenancy.repository.TagRepository;
+import com.hendisantika.multitenancy.util.Translator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -117,5 +119,15 @@ public class PostService {
                         () ->
                                 new DataNotFoundException(
                                         MessageFormat.format("Post id {0} not found", String.valueOf(postId))));
+    }
+
+    public void deleteTagFromPost(Long postId, Long tagId) {
+        Optional<Post> post = postRepository.findById(postId);
+        if (post.isPresent()) {
+            post.get().removeTag(tagId);
+            postRepository.save(post.get());
+        } else {
+            throw new BadRequestException(Translator.toLocale("DELETE_ERROR_PLEASE_CHECK_ID"));
+        }
     }
 }
