@@ -2,10 +2,12 @@ package com.hendisantika.multitenancy.service;
 
 import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
 import com.hendisantika.multitenancy.entity.Tag;
+import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.text.MessageFormat;
 import java.util.List;
 
 /**
@@ -29,5 +31,14 @@ public class TagService {
 
         List<Tag> tagList = tagRepository.findAll();
         return tagList;
+    }
+
+    public Tag getById(Long id) {
+        return tagRepository
+                .findById(id)
+                .orElseThrow(
+                        () ->
+                                new DataNotFoundException(
+                                        MessageFormat.format("Tag id {0} not found", String.valueOf(id))));
     }
 }
