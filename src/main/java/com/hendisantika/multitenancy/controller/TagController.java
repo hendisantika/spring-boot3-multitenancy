@@ -43,4 +43,9 @@ public class TagController {
         Tag updated = tagService.createOrUpdate(Tag);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+
+    @DeleteMapping("/v1/tags/{id}")
+    public void deleteById(@PathVariable("id") Long id) {
+        tagService.deleteById(id);
+    }
 }
