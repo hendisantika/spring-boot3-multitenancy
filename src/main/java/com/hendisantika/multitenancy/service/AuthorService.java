@@ -1,8 +1,12 @@
 package com.hendisantika.multitenancy.service;
 
+import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
+import com.hendisantika.multitenancy.entity.Author;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA.
@@ -19,4 +23,11 @@ import org.springframework.stereotype.Service;
 public class AuthorService {
 
     private final AuthorRepository authorRepository;
+
+    public List<Author> getAllAuthors() {
+        SpringBoot3MultitenancyApplication.defaultProperties.setProperty("lang", "en");
+
+        List<Author> authorList = authorRepository.findAll();
+        return authorList;
+    }
 }
