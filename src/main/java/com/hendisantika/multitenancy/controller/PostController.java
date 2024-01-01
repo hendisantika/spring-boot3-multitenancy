@@ -1,8 +1,10 @@
 package com.hendisantika.multitenancy.controller;
 
 import com.hendisantika.multitenancy.entity.Post;
+import com.hendisantika.multitenancy.model.PostDTO;
 import com.hendisantika.multitenancy.service.PostService;
 import com.hendisantika.multitenancy.util.PageUtils;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -39,5 +41,11 @@ public class PostController {
     public ResponseEntity<Post> getPostById(@PathVariable("id") Long id) {
         Post entity = postService.getById(id);
         return new ResponseEntity<>(entity, HttpStatus.OK);
+    }
+
+    @PostMapping("/v1/posts")
+    public ResponseEntity<Post> createOrUpdate(@Valid @RequestBody PostDTO postDTO) {
+        Post updated = postService.createOrUpdate(postDTO);
+        return new ResponseEntity<>(updated, HttpStatus.OK);
     }
 }
