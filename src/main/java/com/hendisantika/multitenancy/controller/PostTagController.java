@@ -37,4 +37,9 @@ public class PostTagController {
         Tag updated = postService.addTag(id, tagRequest);
         return new ResponseEntity<>(updated, HttpStatus.OK);
     }
+
+    @DeleteMapping("/v1/posts/{id}/tags/{tagId}")
+    public void deleteTagFromPost(@PathVariable("id") Long id, @PathVariable("tagId") Long tagId) {
+        postService.deleteTagFromPost(id, tagId);
+    }
 }
