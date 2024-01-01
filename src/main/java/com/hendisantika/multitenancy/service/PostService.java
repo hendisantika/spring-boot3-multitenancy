@@ -1,11 +1,15 @@
 package com.hendisantika.multitenancy.service;
 
+import com.hendisantika.multitenancy.entity.Post;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import com.hendisantika.multitenancy.repository.PostRepository;
 import com.hendisantika.multitenancy.repository.TagRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,4 +34,15 @@ public class PostService {
     private final AuthorRepository authorRepository;
 
     private final TagRepository tagRepository;
+
+    @Cacheable(value = "posts")
+    public Page<Post> getAllPosts(Pageable pageable, String title) {
+        Page<Post> postList;
+        if (title == null) {
+            postList = postRepository.findAll(pageable);
+        } else {
+            postList = postRepository.findByTitleContainingIgnoreCase(title, pageable);
+        }
+        return postList;
+    }
 }
