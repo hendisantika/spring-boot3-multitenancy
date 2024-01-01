@@ -51,4 +51,12 @@ public class BaseControllerAdvice {
         return new ErrorResponse(
                 String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage(), TIMESTAMP);
     }
+
+    @ExceptionHandler({UnauthorizedException.class})
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
+    public ErrorResponse handleUnauthorizedException(Exception ex) {
+        return new ErrorResponse(
+                String.valueOf(HttpStatus.UNAUTHORIZED.value()), ex.getMessage(), TIMESTAMP);
+    }
+
 }
