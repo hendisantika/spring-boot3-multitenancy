@@ -1,7 +1,9 @@
 package com.hendisantika.multitenancy.service;
 
+import com.hendisantika.multitenancy.entity.Author;
 import com.hendisantika.multitenancy.entity.Post;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
+import com.hendisantika.multitenancy.model.PostDTO;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import com.hendisantika.multitenancy.repository.PostRepository;
 import com.hendisantika.multitenancy.repository.TagRepository;
@@ -14,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
+import java.util.Optional;
 
 /**
  * Created by IntelliJ IDEA.
@@ -56,5 +59,24 @@ public class PostService {
                         () ->
                                 new DataNotFoundException(
                                         MessageFormat.format("Post id {0} not found", String.valueOf(id))));
+    }
+
+    public Post createOrUpdate(PostDTO postRequest) {
+        Optional<Post> existingPost = postRepository.findById(postRequest.getId());
+
+        if (existingPost.isPresent()) {
+            Post postUpdate = existingPost.get();
+
+            postUpdate.setTitle(postRequest.getTitle());
+            postUpdate.setBody(postRequest.getBody());
+            if (postRequest.getAuthorId() != 0) {
+                Optional<Author> author = authorRepository.findById(postRequest.getAuthorId());
+                author.ifPresent(postUpdate::setAuthor);
+            }
+
+            return postRepository.save(postUpdate);
+        } else {
+            return postRepository.save(modelMapper.map(postRequest, Post.class));
+        }
     }
 }
