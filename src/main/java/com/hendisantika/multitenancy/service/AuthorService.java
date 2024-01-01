@@ -2,8 +2,10 @@ package com.hendisantika.multitenancy.service;
 
 import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
 import com.hendisantika.multitenancy.entity.Author;
+import com.hendisantika.multitenancy.exception.BadRequestException;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
+import com.hendisantika.multitenancy.util.Translator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -54,6 +56,15 @@ public class AuthorService {
             return authorRepository.save(authorUpdate);
         } else {
             return authorRepository.save(authorRequest);
+        }
+    }
+
+    public void deleteById(Long id) {
+        Optional<Author> author = authorRepository.findById(id);
+        if (author.isPresent()) {
+            authorRepository.deleteById(id);
+        } else {
+            throw new BadRequestException(Translator.toLocale("DELETE_ERROR_PLEASE_CHECK_ID"));
         }
     }
 }
