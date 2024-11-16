@@ -1,24 +1,42 @@
-version: '3.9'
 services:
   db:
     container_name: mysql
-    image: 'mysql:latest'
+    image: 'mysql:9.1.0'
     ports:
       - "13306:3306"
     restart: always
     environment:
       MYSQL_DATABASE: blog
-      #      MYSQL_USER: root
-      MYSQL_PASSWORD: p@123456
-      MYSQL_ROOT_PASSWORD: p@123456
+      MYSQL_USER: yuji
+      MYSQL_PASSWORD: 53cret
+      MYSQL_ROOT_PASSWORD: 53cret
     volumes:
       - db-data:/var/lib/mysql
     networks:
       - multi-tenancy
 
+  db2:
+    container_name: mysql2
+    image: 'mysql:9.1.0'
+    ports:
+      - "23306:3306"
+    restart: always
+    environment:
+      MYSQL_DATABASE: blog_fr
+      MYSQL_USER: yuji
+      MYSQL_PASSWORD: 53cret
+      MYSQL_ROOT_PASSWORD: 53cret
+    volumes:
+      - db-data2:/var/lib/mysql
+    networks:
+      - multi-tenancy2
+
 # Volumes
 volumes:
   db-data:
+  db-data2:
+    driver: bridge
 
 networks:
   multi-tenancy:
+  multi-tenancy2:

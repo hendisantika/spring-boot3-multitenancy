@@ -7,10 +7,9 @@ spring:
       path: /api
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
-    username: root
-    #    password: p@123456
-    password: root
+    url: jdbc:mysql://localhost:13306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+    username: yuji
+    password: 53cret
   flyway:
     enabled: true
     locations: classpath:db/migration
@@ -27,15 +26,15 @@ spring:
 db:
   configurations:
     en:
-      url: jdbc:mysql://localhost:3306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:13306/blog?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
       driver: com.mysql.cj.jdbc.Driver
-      username: root
-      password: root
+      username: yuji
+      password: 53cret
     fr:
-      url: jdbc:mysql://localhost:3306/blog_fr?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
+      url: jdbc:mysql://localhost:23306/blog_fr?createDatabaseIfNotExist=true&useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true
       driver: com.mysql.cj.jdbc.Driver
-      username: root
-      password: root
+      username: yuji
+      password: 53cret
 
 springdoc:
   packagesToScan: com.hendisantika.multitenancy

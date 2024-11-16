@@ -1,6 +1,7 @@
 package com.hendisantika.multitenancy.config.db;
 
 import com.hendisantika.multitenancy.SpringBoot3MultitenancyApplication;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.jdbc.datasource.lookup.AbstractRoutingDataSource;
 
 import java.util.Objects;
@@ -15,12 +16,13 @@ import java.util.Objects;
  * Time: 04:58
  * To change this template use File | Settings | File Templates.
  */
+@Slf4j
 public class CustomRoutingDataSource extends AbstractRoutingDataSource {
 
     @Override
     protected Object determineCurrentLookupKey() {
         String lang = SpringBoot3MultitenancyApplication.defaultProperties.getProperty("lang");
-        System.out.println("lang = " + lang);
+        log.info("lang = {}", lang);
         if (Objects.nonNull(lang)) {
             return lang;
         } else {
