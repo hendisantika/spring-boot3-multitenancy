@@ -11,7 +11,7 @@ startup.
 
 | Component      | Version                                   |
 |----------------|-------------------------------------------|
-| Java           | 21                                        |
+| Java           | 25                                        |
 | Spring Boot    | 4.1.0                                     |
 | Spring Data JPA / Hibernate | via Spring Boot BOM          |
 | Flyway         | via Spring Boot BOM (`flyway-mysql`)      |
@@ -49,7 +49,7 @@ per request (subdomain, JWT claim, header) and keep it in a `ThreadLocal`/`Reque
 
 ## Requirements
 
-* JDK 21
+* JDK 25
 * Docker (for the two MySQL instances)
 
 ## Running it
