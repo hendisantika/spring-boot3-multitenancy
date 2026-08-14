@@ -19,6 +19,11 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    # The dependency submission API writes the snapshot back to the repository,
+    # which the default read-only workflow token is not allowed to do.
+    permissions:
+      contents: write
+
     steps:
     - uses: actions/checkout@v7
     - name: Set up JDK 21
