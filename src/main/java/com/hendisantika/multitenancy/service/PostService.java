@@ -5,6 +5,7 @@ import com.hendisantika.multitenancy.entity.Post;
 import com.hendisantika.multitenancy.entity.Tag;
 import com.hendisantika.multitenancy.exception.BadRequestException;
 import com.hendisantika.multitenancy.exception.DataNotFoundException;
+import com.hendisantika.multitenancy.exception.DuplicateException;
 import com.hendisantika.multitenancy.model.PostDTO;
 import com.hendisantika.multitenancy.repository.AuthorRepository;
 import com.hendisantika.multitenancy.repository.PostRepository;
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service;
 
 import java.text.MessageFormat;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -108,9 +110,17 @@ public class PostService {
                             if (tagRequest.getId() != null) {
                                 Optional<Tag> existingTag = tagRepository.findById(tagRequest.getId());
                                 if (existingTag.isPresent()) {
-                                    post.addTag(existingTag.get());
+                                    Tag tag = existingTag.get();
+                                    if (post.getTagList().stream()
+                                            .anyMatch(t -> Objects.equals(t.getId(), tag.getId()))) {
+                                        throw new DuplicateException(
+                                                MessageFormat.format(
+                                                        "Tag id {0} is already attached to post id {1}",
+                                                        String.valueOf(tag.getId()), String.valueOf(postId)));
+                                    }
+                                    post.addTag(tag);
                                     postRepository.save(post);
-                                    return existingTag.get();
+                                    return tag;
                                 } else {
                                     throw new DataNotFoundException(
                                             MessageFormat.format(
