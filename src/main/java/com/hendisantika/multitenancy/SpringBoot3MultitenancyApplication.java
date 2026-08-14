@@ -3,12 +3,11 @@ package com.hendisantika.multitenancy;
 import org.modelmapper.ModelMapper;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 
 import java.util.Properties;
 
-@SpringBootApplication(exclude = {FlywayAutoConfiguration.class})
+@SpringBootApplication
 public class SpringBoot3MultitenancyApplication {
     public static final Properties defaultProperties = new Properties();
 
