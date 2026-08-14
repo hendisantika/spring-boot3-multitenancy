@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -31,7 +32,7 @@ public class Post extends Base implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     private String title;
     private String body;
@@ -53,8 +54,9 @@ public class Post extends Base implements Serializable {
         this.tagList.add(tag);
     }
 
-    public void removeTag(long tagId) {
-        Optional<Tag> tag = this.tagList.stream().filter(t -> t.getId() == tagId).findFirst();
+    public void removeTag(Long tagId) {
+        Optional<Tag> tag =
+                this.tagList.stream().filter(t -> Objects.equals(t.getId(), tagId)).findFirst();
         tag.ifPresent(value -> this.tagList.remove(value));
     }
 }

@@ -46,7 +46,10 @@ public class TagService {
     }
 
     public Tag createOrUpdate(Tag tagRequest) {
-        Optional<Tag> existingTag = tagRepository.findById(tagRequest.getId());
+        Optional<Tag> existingTag =
+                tagRequest.getId() == null
+                        ? Optional.empty()
+                        : tagRepository.findById(tagRequest.getId());
 
         if (existingTag.isPresent()) {
             Tag tagUpdate = existingTag.get();

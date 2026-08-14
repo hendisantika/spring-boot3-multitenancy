@@ -46,7 +46,10 @@ public class AuthorService {
     }
 
     public Author createOrUpdate(Author authorRequest) {
-        Optional<Author> existingAuthor = authorRepository.findById(authorRequest.getId());
+        Optional<Author> existingAuthor =
+                authorRequest.getId() == null
+                        ? Optional.empty()
+                        : authorRepository.findById(authorRequest.getId());
 
         if (existingAuthor.isPresent()) {
             Author authorUpdate = existingAuthor.get();

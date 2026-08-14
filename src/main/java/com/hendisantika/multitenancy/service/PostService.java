@@ -66,21 +66,28 @@ public class PostService {
     }
 
     public Post createOrUpdate(PostDTO postRequest) {
-        Optional<Post> existingPost = postRepository.findById(postRequest.getId());
+        Optional<Post> existingPost =
+                postRequest.getId() == null
+                        ? Optional.empty()
+                        : postRepository.findById(postRequest.getId());
 
         if (existingPost.isPresent()) {
             Post postUpdate = existingPost.get();
 
             postUpdate.setTitle(postRequest.getTitle());
             postUpdate.setBody(postRequest.getBody());
-            if (postRequest.getAuthorId() != 0) {
+            if (postRequest.getAuthorId() != null) {
                 Optional<Author> author = authorRepository.findById(postRequest.getAuthorId());
                 author.ifPresent(postUpdate::setAuthor);
             }
 
             return postRepository.save(postUpdate);
         } else {
-            return postRepository.save(modelMapper.map(postRequest, Post.class));
+            Post newPost = modelMapper.map(postRequest, Post.class);
+            if (postRequest.getAuthorId() != null) {
+                authorRepository.findById(postRequest.getAuthorId()).ifPresent(newPost::setAuthor);
+            }
+            return postRepository.save(newPost);
         }
     }
 
@@ -98,8 +105,8 @@ public class PostService {
                 .findById(postId)
                 .map(
                         post -> {
-                            Optional<Tag> existingTag = tagRepository.findById(tagRequest.getId());
-                            if (tagRequest.getId() != 0) {
+                            if (tagRequest.getId() != null) {
+                                Optional<Tag> existingTag = tagRepository.findById(tagRequest.getId());
                                 if (existingTag.isPresent()) {
                                     post.addTag(existingTag.get());
                                     postRepository.save(post);

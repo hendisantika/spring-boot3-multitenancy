@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PostDTO {
 
-    private long id;
+    private Long id;
 
     @Column(name = "title", nullable = false)
     @NotBlank(message = "Title is mandatory")
@@ -33,5 +33,5 @@ public class PostDTO {
     @NotBlank(message = "Body is mandatory")
     private String body;
 
-    private long authorId;
+    private Long authorId;
 }
