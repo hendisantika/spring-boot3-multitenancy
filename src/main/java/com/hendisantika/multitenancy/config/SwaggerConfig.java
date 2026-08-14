@@ -23,16 +23,15 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class SwaggerConfig implements WebMvcConfigurer {
 
-    private static final String REDIRECT_URL = "/swagger-ui.html";
+    private static final String REDIRECT_URL = "/swagger-ui/index.html";
 
     @Value("${spring.mvc.servlet.path}")
     private String baseUrl;
 
     @Override
     public void addViewControllers(final ViewControllerRegistry registry) {
+        // Patterns are relative to spring.mvc.servlet.path, so "/" is the API root itself.
         registry.addRedirectViewController("/", baseUrl.concat(REDIRECT_URL));
-        registry.addRedirectViewController("/swagger-ui", baseUrl.concat(REDIRECT_URL));
-        registry.addRedirectViewController("/api", baseUrl.concat(REDIRECT_URL));
     }
 
     @Bean
