@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
@@ -36,6 +37,16 @@ public class BaseControllerAdvice {
     @ExceptionHandler({NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public ErrorResponse noHandlerFoundException(NoHandlerFoundException ex) {
+        log.debug(ex.getMessage(), ex.getCause());
+        return new ErrorResponse(
+                String.valueOf(HttpStatus.NOT_FOUND.value()),
+                "No resource found for your request. Please verify you request",
+                now());
+    }
+
+    @ExceptionHandler({NoResourceFoundException.class})
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse noResourceFoundException(NoResourceFoundException ex) {
         log.debug(ex.getMessage(), ex.getCause());
         return new ErrorResponse(
                 String.valueOf(HttpStatus.NOT_FOUND.value()),
@@ -92,7 +103,7 @@ public class BaseControllerAdvice {
     @ExceptionHandler({Exception.class, ServiceException.class})
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleAllExceptions(Exception ex) {
-        log.error(ex.getMessage(), ex.getLocalizedMessage());
+        log.error(ex.getMessage(), ex);
         return new ErrorResponse(
                 String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage(), now());
     }
