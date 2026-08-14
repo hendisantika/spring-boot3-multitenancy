@@ -35,7 +35,6 @@ services:
 volumes:
   db-data:
   db-data2:
-    driver: bridge
 
 networks:
   multi-tenancy:
