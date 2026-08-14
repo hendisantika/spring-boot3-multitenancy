@@ -3,7 +3,6 @@ package com.hendisantika.multitenancy.exception.base;
 import com.hendisantika.multitenancy.exception.*;
 import com.hendisantika.multitenancy.model.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -30,7 +29,9 @@ import java.util.Map;
 @RestControllerAdvice
 public class BaseControllerAdvice {
 
-    public static final Timestamp TIMESTAMP = new Timestamp(System.currentTimeMillis());
+    private static Timestamp now() {
+        return new Timestamp(System.currentTimeMillis());
+    }
 
     @ExceptionHandler({NoHandlerFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -39,7 +40,7 @@ public class BaseControllerAdvice {
         return new ErrorResponse(
                 String.valueOf(HttpStatus.NOT_FOUND.value()),
                 "No resource found for your request. Please verify you request",
-                TIMESTAMP);
+                now());
     }
 
     @ExceptionHandler({DataNotFoundException.class})
@@ -47,35 +48,35 @@ public class BaseControllerAdvice {
     public ErrorResponse dataNotFoundException(Exception ex) {
         log.debug(ex.getMessage(), ex.getCause());
         return new ErrorResponse(
-                String.valueOf(HttpStatus.NOT_FOUND.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.NOT_FOUND.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler({BadRequestException.class, DuplicateException.class})
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleBadRequestException(Exception ex) {
         return new ErrorResponse(
-                String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.BAD_REQUEST.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler({UnauthorizedException.class})
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ErrorResponse handleUnauthorizedException(Exception ex) {
         return new ErrorResponse(
-                String.valueOf(HttpStatus.UNAUTHORIZED.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.UNAUTHORIZED.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler({ForbiddenException.class})
     @ResponseStatus(HttpStatus.FORBIDDEN)
     public ErrorResponse handleForbiddenException(Exception ex) {
         return new ErrorResponse(
-                String.valueOf(HttpStatus.FORBIDDEN.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.FORBIDDEN.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler({TooManyRequestsException.class})
     @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
     public ErrorResponse handleTooManyRequestsException(Exception ex) {
         return new ErrorResponse(
-                String.valueOf(HttpStatus.TOO_MANY_REQUESTS.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.TOO_MANY_REQUESTS.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
@@ -85,7 +86,7 @@ public class BaseControllerAdvice {
         return new ErrorResponse(
                 String.valueOf(HttpStatus.METHOD_NOT_ALLOWED.value()),
                 "Method Not Allowed. Please verify you request",
-                TIMESTAMP);
+                now());
     }
 
     @ExceptionHandler({Exception.class, ServiceException.class})
@@ -93,7 +94,7 @@ public class BaseControllerAdvice {
     public ErrorResponse handleAllExceptions(Exception ex) {
         log.error(ex.getMessage(), ex.getLocalizedMessage());
         return new ErrorResponse(
-                String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage(), TIMESTAMP);
+                String.valueOf(HttpStatus.INTERNAL_SERVER_ERROR.value()), ex.getMessage(), now());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -104,6 +105,6 @@ public class BaseControllerAdvice {
                 .getFieldErrors()
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return new ErrorResponse(
-                String.valueOf(HttpStatus.BAD_REQUEST.value()), errors.toString(), TIMESTAMP);
+                String.valueOf(HttpStatus.BAD_REQUEST.value()), errors.toString(), now());
     }
 }
