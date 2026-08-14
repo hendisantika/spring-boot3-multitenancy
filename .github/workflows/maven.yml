@@ -27,8 +27,36 @@ jobs:
         java-version: '21'
         distribution: 'temurin'
         cache: maven
+
+    # The context test boots the real application, so every tenant database from
+    # db.configurations must be reachable. Reuse the project's compose file so CI
+    # and local development share one definition.
+    - name: Start tenant databases
+      run: docker compose up -d
+
+    - name: Wait for tenant databases
+      run: |
+        for container in mysql mysql2; do
+          for i in $(seq 1 60); do
+            if docker exec "$container" mysqladmin ping -h127.0.0.1 -uroot -p53cret --silent 2>/dev/null; then
+              echo "$container is ready"
+              break
+            fi
+            if [ "$i" -eq 60 ]; then
+              echo "$container did not become ready in time"
+              docker logs "$container"
+              exit 1
+            fi
+            sleep 2
+          done
+        done
+
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+
+    - name: Stop tenant databases
+      if: always()
+      run: docker compose down -v
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
